@@ -97,7 +97,7 @@ const App = () => {
 
 !!!: try to make 'props' be **read-only**
 
-
+!!!!!!!: the first character of component's name should be **CAPITAL**.
 
 ### JSX
 
@@ -171,6 +171,8 @@ const element = {
   }
 }
 ```
+
+
 
 
 
