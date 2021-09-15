@@ -12,45 +12,46 @@ const Part = (props) => (
 );
 
 const Content = (props) => (
-  <div>
-    <Part part={props.part1} exercises={props.exercises1} />
-    <Part part={props.part2} exercises={props.exercises2} />
-    <Part part={props.part3} exercises={props.exercises3} />
+  <div> 
+    <Part part={props[0].name} exercises={props[0].exercises} />
+    <Part part={props[1].name} exercises={props[1].exercises} />
+    <Part part={props[2].name} exercises={props[2].exercises} />
   </div>
 );
 
 const Total = (props) => {
   console.log(props);
   return (<p>
-            Number of exercises {props.exercises1 + props.exercises2 + props.exercises3}
+            Number of exercises {props[0].exercises + props[1].exercises + props[2].exercises}
           </p>);
 };
 
 const App = () => {
   
   const course = 'Half Stack application development';
-  const part1 = {
-    name : 'Fundamentals of React',
-    exercises1 : 10
-  }; 
-    
-  const part2 = {
-    name: 'Using props to pass data',
-    exercises2 : 7
-  }; 
-  const part3 = {
-    name : 'State of a component',
-    exercises3 : 14
-  };
+  const parts = [
+    {
+      name : 'Fundamentals of React',
+      exercises : 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises : 7
+    },
+    {
+      name : 'State of a component',
+      exercises : 14
+    }
+  ];
   
 
   // '...' will seperately assign the variables from props into props, else, the props will be encapulated into props
   // more info: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
   return (
     <div>
-      <Header course={props.course} />
-      <Content {...props} />
-      <Total {...props} />
+      <Header course={course} />
+      <Content {...parts} />
+      <Total {...parts} />
     </div>
   )
 }
