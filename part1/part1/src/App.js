@@ -41,6 +41,21 @@ const HookExample = () => {
   )
 }
 
+const History = ({allClicks}) => {
+  if (allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  };
+  return (
+    <div>
+      button press history: {allClicks.join('-')}
+    </div>
+  );
+};
+
 const ComplexState = () => {
   const [clicks, setClicks] = useState({
     left: 0, right: 0
@@ -75,7 +90,7 @@ const ComplexState = () => {
       <Button onClick={clickRight} text='R' />
       {clicks.right}
       <br></br>
-      {allClicks.join('-')}
+      <History allClicks={allClicks} />
     </div>
   )
 }
