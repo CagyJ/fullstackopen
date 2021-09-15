@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 
-const Welcome = (props) => (
+const Welcome = ({name}) => (
   <div>
-    <h1>Hello, {props.name}</h1>
+    <h1>Hello, {name}</h1>
   </div>
 )
 
-const Display = (props) => {
+const Display = ({counter}) => {
   return (
-    <div>{props.counter}</div>
+    <div>{counter}</div>
   )
 }
 
-const Button = (props) => {
+const Button = ({text, onClick}) => {
   return (
-    <button onClick = {props.onClick}>
-      {props.text}
+    <button onClick = {onClick}>
+      {text}
     </button>
   );
 }
@@ -36,7 +36,7 @@ const HookExample = () => {
 
       <Button text='Click me!' onClick={increaseByOne} />
       <Button text='ZERO' onClick={setToZero} />
-      
+
     </div>
   )
 }
