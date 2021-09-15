@@ -10,13 +10,16 @@ const HookExample = () => {
   // '0' is the initial state for the variable('count')
   const [count, setCount] = useState(0);
 
+  const increaseByOne = () => setCount(count + 1);
+  const setToZero = () => setCount(0);
+
   return (
     <div>
       <p>You clicked {count} times.</p>
-      <button onClick={ () => setCount(count + 1)}>
+      <button onClick={ increaseByOne }>
         Click me!
       </button>
-      <button onClick={ () => setCount(0)}>
+      <button onClick={ setToZero }>
         ZERO
       </button>
     </div>
