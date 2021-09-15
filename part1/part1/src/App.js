@@ -6,6 +6,20 @@ const Welcome = (props) => (
   </div>
 )
 
+const Display = (props) => {
+  return (
+    <div>{props.counter}</div>
+  )
+}
+
+const Button = (props) => {
+  return (
+    <button onClick = {props.onClick}>
+      {props.text}
+    </button>
+  );
+}
+
 const HookExample = () => {
   // '0' is the initial state for the variable('count')
   const [count, setCount] = useState(0);
@@ -15,13 +29,14 @@ const HookExample = () => {
 
   return (
     <div>
-      <p>You clicked {count} times.</p>
-      <button onClick={ increaseByOne }>
-        Click me!
-      </button>
-      <button onClick={ setToZero }>
-        ZERO
-      </button>
+      
+      <p>You clicked</p> 
+      <Display counter={count} /> 
+      <p>times.</p>
+
+      <Button text='Click me!' onClick={increaseByOne} />
+      <Button text='ZERO' onClick={setToZero} />
+      
     </div>
   )
 }
