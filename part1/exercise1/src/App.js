@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = (props) => {
   console.log(props);
-  return <h1>{props.course}</h1>
+  return <h1>{props.course}</h1>;
 };
 
 const Part = (props) => (
@@ -27,16 +27,22 @@ const Total = (props) => {
 };
 
 const App = () => {
-  let props = {
-   course : 'Half Stack application development',
-   part1 : 'Fundamentals of React',
-   exercises1 : 10,
-   part2 : 'Using props to pass data',
-   exercises2 : 7,
-   part3 : 'State of a component',
-   exercises3 : 14
-  }
-  console.log(props);
+  
+  const course = 'Half Stack application development';
+  const part1 = {
+    name : 'Fundamentals of React',
+    exercises1 : 10
+  }; 
+    
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises2 : 7
+  }; 
+  const part3 = {
+    name : 'State of a component',
+    exercises3 : 14
+  };
+  
 
   // '...' will seperately assign the variables from props into props, else, the props will be encapulated into props
   // more info: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
