@@ -41,6 +41,45 @@ const HookExample = () => {
   )
 }
 
+const ComplexState = () => {
+  const [clicks, setClicks] = useState({
+    left: 0, right: 0
+  });
+
+  const [allClicks, setAll] = useState([]);
+
+  const clickLeft = () => {
+    const newClicks = {
+      left: clicks.left + 1,
+      right: clicks.right
+    };
+    setClicks(newClicks);
+
+    setAll(allClicks.concat('L'));
+  }
+
+  const clickRight = () => {
+    const newClicks = {
+      left: clicks.left,
+      right: clicks.right + 1
+    };
+    setClicks(newClicks);
+
+    setAll(allClicks.concat('R'));
+  }
+
+  return (
+    <div>
+      {clicks.left} 
+      <Button onClick={clickLeft} text='L' />
+      <Button onClick={clickRight} text='R' />
+      {clicks.right}
+      <br></br>
+      {allClicks.join('-')}
+    </div>
+  )
+}
+
 // const App = () => {
 //   const now = new Date();
 //    return (
@@ -68,7 +107,10 @@ const App = () => {
       'h1', null, 'Now: ', now.toString()
     ),
     React.createElement(
-      HookExample, null
+      HookExample
+    ),
+    React.createElement(
+      ComplexState
     )
   );
 };
