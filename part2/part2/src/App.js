@@ -14,6 +14,13 @@ const App = (props) => {
           </li>
         )}
       </ul>
+      <ul>
+        {notes.map((note, i) =>
+          <li key={i}>
+            {note.content}
+          </li>
+        )}
+      </ul>
     </div>
   )
 }
