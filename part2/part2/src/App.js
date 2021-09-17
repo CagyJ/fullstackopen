@@ -10,6 +10,16 @@ const App = ( {notes} ) => {
     // prevents the default action of submitting a form
     event.preventDefault();
     console.log('button clicked', event.target);  
+
+    const noteObject = {
+      content: newNote,
+      data: new Date().toISOString(),
+      import: Math.random() < 0.5,
+      id: notes.length + 1
+    };
+
+    setNoteArr(notes.concat(noteObject));
+    setNewNote('');
   }
 
   const handleNoteChange = (event) => {
