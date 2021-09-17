@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Note from './components/Note'
 
 const App = ( {notes} ) => {
+
+  const [noteArr, setNoteArr] = useState(notes);
+  const [newNote, setNewNote] = useState('a new note...')
+
+  const addNote = (event) => {
+    // prevents the default action of submitting a form
+    event.preventDefault();
+    console.log('button clicked', event.target);  
+  }
+
+  const handleNoteChange = (event) => {
+    console.log(event);
+    setNewNote(event.target.value);
+  }
 
   return (
     <div>
@@ -18,6 +32,11 @@ const App = ( {notes} ) => {
           </li>
         )}
       </ul> */}
+
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange}/>
+        <button type="submit">save</button>
+      </form>
     </div>
   )
 }
