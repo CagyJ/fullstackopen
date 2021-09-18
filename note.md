@@ -362,6 +362,8 @@ inheritance in js: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Obj
 
 - intro, tutorial: https://javascript.info/
 - Tutorial(video): https://egghead.io/
+- Functional programming in JavaScript: https://www.youtube.com/playlist?list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84
+- Template strings in mdn
 
 
 
@@ -521,6 +523,57 @@ const App = () => {
 
 
 
+**Passing Event Handlers to Child Components**
+
+Use Function that returns a function
+
+```javascript
+const Button = (props) => (
+	<button onClick={props.handleClick}> {props.text} </button>
+)
+
+const App = () => {
+	const [value, setValue] = useState(10);
+	
+	const setToValue = (newValue) => {
+		setValue(newValue);
+	}
+	
+	return (
+		<div>
+			<Button handleClick={() => setToValue(1000)} text="thousand" />
+	)
+}
+```
+
+Otherwise, u will get a re-render too many times error.
+
+
+
+
+
+**Form**
+
+Enable editing of the input element, need to register an event handler to synchronize the changes:
+
+```html
+<form onSubmit={addNote}>
+  <input value={newNote} onChange={handleNoteChange}/>
+  <button type="submit">save</button>
+</form>
+```
+
+```javascript
+const handleNoteChange = (event) => {
+  console.log(event.target.value);
+  setNewNote(event.target.value);
+}
+```
+
+Every time a change occurs in the input element, the event handler function will reveive the event object as parameter.
+
+
+
 
 
 
@@ -547,3 +600,40 @@ const [allClicks, setAll] = useState([]);
 
 - Start learning React(uses class components): https://egghead.io/courses/react-with-class-components-fundamentals-4351f8bb
 - The Befinner's Guide to React(uses the new functional): https://egghead.io/courses/the-beginner-s-guide-to-react
+
+
+
+## Part 2: Communicating with server
+
+### Key-attribute
+
+https://reactjs.org/docs/lists-and-keys.html#keys
+
+the error is caused by `map`, when we use `map`, we must have a unique key value(attribute).
+
+So, we could use the indexes as the key-attribute
+
+```javascript
+{notes.map(note => 
+  <li key={note.id}>
+    {note.content}
+  </li>
+)}
+```
+
+Or passing the second parmeter to the callback function of the`map`,
+
+```javascript
+{notes.map((note, i) =>
+    <li key={i}>
+      {note.content}
+		</li>
+)}
+```
+
+Also called index as a key is an anti-pattern, see more: https://robinpokorny.medium.com/index-as-a-key-is-an-anti-pattern-e0349aece318
+
+
+
+
+
