@@ -1,5 +1,46 @@
 import React, { useState } from 'react'
 
+const Filter = ({filterArea, inputChangeHandler}) => {
+  return (
+    <div>
+      filter shown with<input name='filter' type='text' value={filterArea} onChange={inputChangeHandler}/>
+    </div>
+  )
+}
+
+const PersonForm = ({onSubmit, newName, newNumber, onChange}) => {
+  return (
+    <div>
+      <form onSubmit={onSubmit}> 
+        <div>
+          name: <input name='name' value={newName} onChange={onChange}/>
+        </div>
+        <div>
+          number: <input name='number' value={newNumber} onChange={onChange}/>
+        </div>
+        <div>
+          <button type="submit" >add</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+const Persons = ({persons, filterArea}) => {
+  return (
+    <div>
+    { persons
+      .filter(person => 
+        person.name && person.name.toLowerCase().includes(filterArea.toLowerCase())
+      )    
+      .map(person =>
+        <h4 key={person.id}>{person.name} {person.number}</h4>
+      )
+    }
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -11,6 +52,17 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
 
   const [filterArea, setFilterArea] = useState('');
+
+  const inputChangeHandler = (event) => {
+    const name = event.target.name;
+    if (name === 'name') {
+      nameChangeHandler(event);
+    } else if (name === 'number') {
+      numberChangeHandler(event);
+    } else {
+      filterChangeHandler(event);
+    }
+  }
 
   const nameChangeHandler = (event) => {
     console.log(event.target.value);
@@ -30,8 +82,9 @@ const App = () => {
 
   const addPerson = (event) => {
       event.preventDefault();
-      if (!isExist) {
-        const newPerson = {name: newName, number: newNumber};
+      console.log(event);
+      if (!isExist(newName)) {
+        const newPerson = {name: newName, number: newNumber, id: persons.length+1};
         setPersons(persons.concat(newPerson));
         setNewName('');
         setNewNumber('');
@@ -40,46 +93,26 @@ const App = () => {
       }
   }
 
-  const isExist = () => {
-    let res = false;
-    persons.forEach(person => {
-      res = person.name === newName ? true : res;
-    });
-
-    return res;
+  const isExist = (name) => {
+    const res = persons.filter(person => 
+      person.name === name
+    );
+    console.log(res);
+    return res.length > 0;
   }
 
   return (
     <div>
       <h2>PhoneBook</h2>
-      
-      <div>
-        filter shown with<input type='text' value={filterArea} onChange={filterChangeHandler}/>
-      </div>
-      
+      <Filter filterArea={filterArea} inputChangeHandler={inputChangeHandler}/>
+
 
       <h2>Add NEW</h2>
-      <form onSubmit={addPerson}> 
-        <div>
-          name: <input value={newName} onChange={nameChangeHandler}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={numberChangeHandler}/>
-        </div>
-        <div>
-          <button type="submit" >add</button>
-        </div>
-      </form>
+      <PersonForm onSubmit={addPerson} newName={newName} newNumber={newNumber} onChange={inputChangeHandler}/>
 
       <h2>Numbers</h2>
-      { persons
-            .filter(person => 
-              person.name && person.name.toLowerCase().includes(filterArea.toLowerCase())
-            )    
-            .map(person =>
-              <h4 key={person.id}>{person.name} {person.number}</h4>
-            )
-      }
+      <Persons persons={persons} filterArea={filterArea} />
+
     </div>
   )
 }
