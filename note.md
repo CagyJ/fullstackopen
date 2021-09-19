@@ -686,3 +686,53 @@ And, modify `package.json` file:
 
 Then we can run `npm run server` to start json-server.
 
+
+
+**Promis**: an object represents an asynchronous operation, which has three states.
+
+- Pending: the final value is not available yet
+- Fulfilled: the operation has completed and the final value is available, somtimes called resolved.
+- Rejected: an error prevented the final value
+
+Using axios to get the promis object from the json-server:
+
+```javascript
+// chained format
+axios
+  .get('http://localhost:3001/notes')
+  .then(response => {
+    const notes = response.data;
+    console.log(notes);
+    
+  });
+```
+
+
+
+
+
+### Effect-hooks
+
+Perform side effects in function components, such as data fetching, setting up a subscription, changing the DOM in React components, ...
+
+So, we can use it to fetch data from a server.
+
+```javascript
+// executed immediately after rendering
+useEffect(() => {
+  console.log('effect');
+  axios
+    .get('http://localhost:3001/notes')
+    .then(response => {
+    console.log('promise fulfilled');
+    setNoteArr(response.data);
+  })
+}, []);
+```
+
+After the component rendering, a call to a state-updating function triggers the re-rendering of the component, the data fetched from the server will be rendered to the screen.
+
+The **first parameter** is a function(**effect** itself), effect run after every completed render.
+
+The **second parameter** is used to specify **how often** the effect run, if it is **empty arrray []**, it represents it only run along with the first render of the component.
+
