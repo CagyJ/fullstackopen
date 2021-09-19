@@ -9,7 +9,17 @@ const App = ( ) => {
   const [showAll, setShowAll] = useState(true);
 
   // executed immediately after rendering
-  useEffect(() => {
+  // useEffect(() => {
+  //   console.log('effect');
+  //   axios
+  //     .get('http://localhost:3001/notes')
+  //     .then(response => {
+  //       console.log('promise fulfilled');
+  //       setNoteArr(response.data);
+  //     })
+  // }, []);
+
+  const hook = () => {
     console.log('effect');
     axios
       .get('http://localhost:3001/notes')
@@ -17,7 +27,9 @@ const App = ( ) => {
         console.log('promise fulfilled');
         setNoteArr(response.data);
       })
-  }, []);
+  }
+
+  useEffect(hook, []);
 
   console.log('render', noteArr.length, 'notes');
 
