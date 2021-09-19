@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
-import Note from './components/Note'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Note from './components/Note';
 
-const App = ( {notes} ) => {
+const App = ( ) => {
 
-  const [noteArr, setNoteArr] = useState(notes);
+  const [noteArr, setNoteArr] = useState([]);
   const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
+
+  // executed immediately after rendering
+  useEffect(() => {
+    console.log('effect');
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled');
+        setNoteArr(response.data);
+      })
+  }, []);
+
+  console.log('render', noteArr.length, 'notes');
 
   const addNote = (event) => {
     // prevents the default action of submitting a form
@@ -16,10 +30,10 @@ const App = ( {notes} ) => {
       content: newNote,
       data: new Date().toISOString(),
       import: Math.random() < 0.5,
-      id: notes.length + 1
+      id: noteArr.length + 1
     };
 
-    setNoteArr(notes.concat(noteObject));
+    setNoteArr(noteArr.concat(noteObject));
     setNewNote('');
   }
 
@@ -29,8 +43,8 @@ const App = ( {notes} ) => {
   }
 
   const notesToShow = showAll 
-                        ? notes
-                        : notes.filter(note => note.important === true);
+                        ? noteArr
+                        : noteArr.filter(note => note.important === true);
   return (
     <div>
       <h1>Notes</h1>
