@@ -1,7 +1,51 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
+const ShowCountry = ({c}) => {
+  return (
+    <div>
+      <h2>{c.name}</h2>
+      <p>capital {c.capital}</p>
+      <p>population {c.population}</p>
+
+      <h3>Language</h3>
+      {
+        c.languages.map((lan, idx) => 
+          <li key={idx}>{lan.name}</li>
+        )
+      }
+      <img src={c.flag} alt="flag"/>
+    </div>
+  )
+}
+
+
 const Display = ({findValue, countries}) => {
+  const [clicked, setClicked] = useState([]);
+
+  const clickIt = (name) => {
+    if(!clicked) {
+      const filterC = clicked.filter((c) => c.name === name);
+      if (filterC.length === 0) {
+        setClicked(clicked.concat(
+          {
+            [name]: true
+          }
+        ))
+      } else {
+        const copy = [...clicked];
+        copy[name] = !copy[name];
+        setClicked(copy);
+      }
+    } else {
+      setClicked(clicked.concat(
+        {
+          [name]: true
+        }
+      ))
+    }
+  }
+
   if (findValue === '') {
     return (
       <div>Search Result will be here</div>
@@ -16,26 +60,22 @@ const Display = ({findValue, countries}) => {
     } else if(res.length === 1) {
       const c = res[0];
       return (
-        <div>
-          <h2>{c.name}</h2>
-          <p>capital {c.capital}</p>
-          <p>population {c.population}</p>
-
-          <h3>Language</h3>
-          {
-            c.languages.map((lan, idx) => 
-              <li key={idx}>{lan.name}</li>
-            )
-          }
-          <img src={c.flag} alt="flag"/>
-        </div>
+        <ShowCountry c={c} />
       )
     } else {
       return (
         <div>
           {res.map((country, idx) => {
             return (
-              <li key={idx}>{country.name}</li>
+              <div key={idx}>
+              <li name={country.name} key={idx}>
+                {country.name} <button onClick={() => clickIt(country.name)}>show</button>
+              </li>
+              {clicked[country.name]
+                ? <ShowCountry key={idx} c={country}/>
+                : <></>
+              }
+              </div>
             )
           })}
         </div>
