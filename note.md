@@ -635,5 +635,54 @@ Also called index as a key is an anti-pattern, see more: https://robinpokorny.me
 
 
 
+### Forms
 
+**IMPORTANT**
+
+controlled component: https://reactjs.org/docs/forms.html#controlled-components
+
+
+
+### Get data from server
+
+**JSON server**: github.com/typicode/json-server
+
+- Create a file called `db.json`
+- Start json server: `npx json-server --port 3001 --watch db.json`
+
+
+
+Nowadays, use `fetch` method (which based on `promises`) to pull the data from server, instead of XHR way.
+
+Currently, JavaScript engines are **single-threaded**, so it cannot execute code in parallel.
+
+It is requirement to use a **non-blocking model** for executig **IO operations**.
+
+*npm: node package manager*
+
+We would like to use `axios` lib, its functions like fetch, but more pleasant to use. And we need to install axios at the root directory of the project:
+
+```shell
+npm install axios
+```
+
+Also, we could install json-server as a development dependency, it could run when we let the app start:
+
+```shell
+npm install json-server --save-dev
+```
+
+And, modify `package.json` file:
+
+```json
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+  "server": "json-server -p3001 --watch db.json"
+}
+```
+
+Then we can run `npm run server` to start json-server.
 
