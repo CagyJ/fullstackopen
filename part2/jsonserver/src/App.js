@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Note from './components/Note';
+import noteService from './service/note';
 
 const App = ( ) => {
 
@@ -21,8 +21,8 @@ const App = ( ) => {
 
   const hook = () => {
     console.log('effect');
-    axios
-      .get('http://localhost:3001/notes')
+    noteService
+      .getAll()
       .then(response => {
         console.log('promise fulfilled');
         setNoteArr(response.data);
@@ -45,8 +45,8 @@ const App = ( ) => {
       id: noteArr.length + 1
     };
 
-    axios
-      .post('http://localhost:3001/notes', noteObject)
+    noteService
+      .create(noteObject)
       .then(response => {
         console.log(response);
         setNoteArr(noteArr.concat(noteObject));
@@ -65,11 +65,12 @@ const App = ( ) => {
   
   const toggleImportanceOf = (id) => {
     console.log('importance of ' + id + ' needs to be toggled');
-    const url = `http://localhost:3001/notes/${id}`
     const note = noteArr.find(n => n.id === id);
     const changedNote = {...note, important: !note.important};
 
-    axios.put(url, changedNote).then(response => {
+    noteService
+      .update(id, changedNote)
+      .then(response => {
       setNoteArr(noteArr.map(note => note.id !== id ? note : response.data))
     })
   }
