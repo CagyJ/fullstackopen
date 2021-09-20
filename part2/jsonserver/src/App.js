@@ -50,6 +50,7 @@ const App = ( ) => {
         setNoteArr(noteArr.concat(returnedNote));
         setNewNote('');
       })
+      
   }
 
   const handleNoteChange = (event) => {
@@ -70,7 +71,13 @@ const App = ( ) => {
       .update(id, changedNote)
       .then(returnedNote => {
       setNoteArr(noteArr.map(note => note.id !== id ? note : returnedNote))
-    })
+      })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNoteArr(noteArr.filter(n => n.id !== id))
+      })
   }
 
   return (
