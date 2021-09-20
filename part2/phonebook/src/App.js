@@ -27,7 +27,7 @@ const PersonForm = ({onSubmit, newName, newNumber, onChange}) => {
   )
 }
 
-const Persons = ({persons, filterArea}) => {
+const Persons = ({persons, filterArea, clickDelete}) => {
   return (
     <div>
     { persons
@@ -35,7 +35,7 @@ const Persons = ({persons, filterArea}) => {
         person.name && person.name.toLowerCase().includes(filterArea.toLowerCase())
       )    
       .map(person =>
-        <h4 key={person.id}>{person.name} {person.number}</h4>
+        <h4 key={person.id}>{person.name} {person.number} <button onClick={()=>clickDelete(person.id)}>delete</button></h4>
       )
     }
     </div>
@@ -90,12 +90,27 @@ const App = () => {
       event.preventDefault();
       console.log(event);
       if (!isExist(newName)) {
-        const newPerson = {name: newName, number: newNumber, id: persons.length+1};
-        setPersons(persons.concat(newPerson));
-        setNewName('');
-        setNewNumber('');
+        const newPerson = {name: newName, number: newNumber};
+        axios
+          .post('http://localhost:3001/persons', newPerson)
+          .then(response => {
+            console.log(response.data);
+            setPersons(persons.concat(response.data));
+            setNewName('');
+            setNewNumber('');
+          })
+
       } else {
-        window.alert(`${newName} is already added to phonebook`);
+
+        if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          const p = persons.find(p => p.name === newName);
+          const changedP = {...p, number: newNumber};
+          axios
+            .put(`http://localhost:3001/persons/${changedP.id}`, changedP)
+            .then(response => {
+              setPersons(persons.map(p => p.name === newName ? response.data : p));
+            })
+        }
       }
   }
 
@@ -105,6 +120,19 @@ const App = () => {
     );
     console.log(res);
     return res.length > 0;
+  }
+
+  const clickDelete = (id) => {
+    console.log("deleting " + id);
+    if(window.confirm(`Delete ${id}?`)) {
+      axios
+        .delete(`http://localhost:3001/persons/${id}`)
+        .then(response => {
+          console.log(response);
+          const newPersons = persons.filter(person => person.id === id);
+          setPersons(newPersons);
+        })
+    }
   }
 
   return (
@@ -117,7 +145,7 @@ const App = () => {
       <PersonForm onSubmit={addPerson} newName={newName} newNumber={newNumber} onChange={inputChangeHandler}/>
 
       <h2>Numbers</h2>
-      <Persons persons={persons} filterArea={filterArea} />
+      <Persons persons={persons} filterArea={filterArea} clickDelete={clickDelete}/>
 
     </div>
   )
