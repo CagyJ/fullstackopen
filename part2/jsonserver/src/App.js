@@ -45,13 +45,12 @@ const App = ( ) => {
       id: noteArr.length + 1
     };
 
-    setNoteArr(noteArr.concat(noteObject));
-    setNewNote('');
-
     axios
       .post('http://localhost:3001/notes', noteObject)
       .then(response => {
         console.log(response);
+        setNoteArr(noteArr.concat(noteObject));
+        setNewNote('');
       })
   }
 
