@@ -47,6 +47,12 @@ const App = ( ) => {
 
     setNoteArr(noteArr.concat(noteObject));
     setNewNote('');
+
+    axios
+      .post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response);
+      })
   }
 
   const handleNoteChange = (event) => {
