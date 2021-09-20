@@ -62,6 +62,18 @@ const App = ( ) => {
   const notesToShow = showAll 
                         ? noteArr
                         : noteArr.filter(note => note.important === true);
+  
+  const toggleImportanceOf = (id) => {
+    console.log('importance of ' + id + ' needs to be toggled');
+    const url = `http://localhost:3001/notes/${id}`
+    const note = noteArr.find(n => n.id === id);
+    const changedNote = {...note, important: !note.important};
+
+    axios.put(url, changedNote).then(response => {
+      setNoteArr(noteArr.map(note => note.id !== id ? note : response.data))
+    })
+  }
+
   return (
     <div>
       <h1>Notes</h1>
@@ -74,7 +86,7 @@ const App = ( ) => {
 
       <ul>
         {notesToShow.map(note => 
-          <Note key={note.id} note={note} />
+          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
         )}
       </ul>
       {/* <ul>
