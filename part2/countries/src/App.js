@@ -1,24 +1,46 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
-const ShowCountry = ({c}) => {
-  
+const Weather = ({capital}) => {
+
   const [weather, setWeather] = useState({})
+  const [displayWeather, setDisplayWeather] = useState(false)
 
   useEffect(() => {
     const api_url = "http://api.weatherstack.com/current"
     const api_key = process.env.REACT_APP_API_KEY
-    const capital = c.capital
     console.log('effect');
     axios
       .get(api_url + "?access_key=" + api_key +
             "&query=" + capital)
       .then(response => {
+        setWeather(response.data);
+        setDisplayWeather(true);
         console.log('promise fulfilled');
         console.log(response.data);
-        setWeather(response.data);
       })
-  }, [c.capital])
+  }, [capital])
+
+  return (
+    <>
+    {
+      displayWeather ? (
+        <>
+              <h3>Weather in {capital}</h3>
+              <p>temperature: {weather.current.temperature}</p>
+              <img src={weather.current.weather_icons} alt="weather"/>
+              <p>wind: {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
+        </>
+      )
+      :
+      <></>
+
+    }
+    </>
+  )
+}
+
+const ShowCountry = ({c}) => {
 
   return (
     <div>
@@ -33,16 +55,8 @@ const ShowCountry = ({c}) => {
         )
       }
       <img src={c.flag} alt="flag"/>
-      {
-        weather 
-          ? (<>
-              <h3>Weather in {c.capital}</h3>
-              <p>temperature: {weather.current.temperature}</p>
-              <img src={weather.current.weather_icons} alt="weather"/>
-              <p>wind: {weather.current.wind_speed} mph direction {weather.current.wind_dir}</p>
-          </>) 
-          : weather
-      }
+      <Weather capital={c.capital} />
+
 
     </div>
   )
