@@ -105,6 +105,8 @@ const App = () => {
 
 
 
+
+
 #### Error
 
 - return a part of table elements as component, and it displays `<div> cannot within <tr> or <td> or sth.`
@@ -118,7 +120,7 @@ const App = () => {
 
 https://reactjs.org/docs/introducing-jsx.html
 
-produces React 'elements', 
+produces React 'elements'
 
 
 
@@ -186,6 +188,29 @@ const element = {
   }
 }
 ```
+
+
+
+JSX中使用表达式
+
+- 属性中：`<MyComponent foo = {1 + 2 + 3}`
+
+- 延展属性：
+
+  ```javascript
+  const props = {firstName: 'Ben', lastName: 'Hector'}
+  const greeting = <Greeting {...props} />
+  ```
+
+- 作为子元素：`const element = <li>{props.message}</li>;`
+
+
+
+
+
+
+
+
 
 
 
@@ -415,6 +440,15 @@ const HookExample = () => {
 ```
 
 **Attention**: the `useState` function must not be called from inside of a loop, a conditional expression and where is not a function defining a component
+
+
+
+
+
+DRY: 
+
+- 能计算得到的状态就不要单独存储
+- 组件尽量无状态，数据通过props获取
 
 
 
@@ -735,4 +769,111 @@ After the component rendering, a call to a state-updating function triggers the 
 The **first parameter** is a function(**effect** itself), effect run after every completed render.
 
 The **second parameter** is used to specify **how often** the effect run, if it is **empty arrray []**, it represents it only run along with the first render of the component.
+
+
+
+### Bind Weather Api
+
+Set environment variable for api-key (Linux/MacOS)
+
+```shell
+REACT_APP_API_KEY='bd476ea1049ba82d6cbcc4bdaf661559' npm start
+```
+
+And then we could use this variable in the application,
+
+```javascript
+process.env.REACT_APP_API_KEY
+```
+
+
+
+
+
+### Store data to server
+
+use Post method to store the data to server,
+
+```javascript
+const noteObject = {
+  content: newNote,
+  data: new Date().toISOString(),
+  import: Math.random() < 0.5,
+  id: noteArr.length + 1
+};
+
+axios
+  .post('http://localhost:3001/notes', noteObject)
+  .then(response => {
+  console.log(response);
+})
+```
+
+
+
+### Update data to server
+
+use Put method to update the data to server
+
+```javascript
+const url = `http://localhost:3001/notes/${id}`
+const note = noteArr.find(n => n.id === id);
+const changedNote = {...note, important: !note.important};
+
+axios.put(url, changedNote).then(response => {
+  setNoteArr(noteArr.map(note => note.id !== id ? note : response.data))
+})
+```
+
+
+
+### Extracting communication with the backend
+
+**single responsibility principle**: every module, class or function in a computer program should have reponsibility over a single part of that program's functionality and it should encapsulate that part.
+
+
+
+
+
+### Handle the error from promise
+
+Use `catch` method as the error handler 
+
+```javascript
+axios
+  .put(`${baseUrl}/${id}`, newObject)
+  .then(response => response.data)
+  .then(changedNote => {
+    // ...
+  })
+  .catch(error => {
+    console.log('fail')
+  })
+```
+
+
+
+### Delete data to server
+
+```javascript
+axios
+  .delete(`http://localhost:3001/persons/${id}`)
+  .then(response => {
+  console.log(response);
+  const newPersons = persons.filter(person => person.id === id);
+  setPersons(newPersons);
+})
+```
+
+
+
+
+
+
+
+## React Lifecycle
+
+https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+
 
