@@ -867,7 +867,162 @@ axios
 
 
 
+## Part 3: Programming a server with NodeJS and Express
 
+use `npm init` to generate the `package.json` file
+
+Then, add a new script inside ''scripts'' block, like `"start": "node index.js"`, which mean we could use `npm start`
+
+
+
+### Simple Web Server
+
+```javascript
+const http = require('http')
+
+const app = http.createServer((request, response) => {
+    response.writeHead(200, { 'Content-Type': 'text/plain' })
+    response.end('Hello World')
+})
+
+const PORT = 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
+```
+
+
+
+### Express
+
+`npm install express`
+
+library which to ease server side development with Node
+
+it will generate `"express": "^4.17.1"`, the ^ means that when the project updates, the version of express will be at least 4.17.1.
+
+If we would like to work on another computer, we could use `npm install` to download the whole packages
+
+example for express:
+
+```javascript
+const express = require('express')
+const app = express()
+app.get('/', (request, response) => {
+    response.send('<h1>Hello World!</h1>')
+})
+```
+
+
+
+### nodemon
+
+Because it is not automatically reloaded after changes, we could import nodemon.
+
+nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
+
+`npm install --save-dev nodemon`
+
+and we can start our application with nodemon like `node_modules/.bin/nodemon index.js`
+
+so, add some new in the `package.json` file, 
+
+```javascript
+"dev": "nodemon index.js"
+```
+
+npm will help us to find the `node_modules/.bin/`directory.
+
+Now, we could use `npm run dev` to start the server with nodemon.
+
+
+
+### REST
+
+Representational State Transfer, aka REST.
+
+the **resources** should have an associated URL which is the resource's **unique address.**
+
+Operation by HTTP verb:
+
+| URL      | verb   | functionality                                                |
+| :------- | :----- | :----------------------------------------------------------- |
+| notes/10 | GET    | fetches a single resource                                    |
+| notes    | GET    | fetches all resources in the collection                      |
+| notes    | POST   | creates a new resource based on the request data             |
+| notes/10 | DELETE | removes the identified resource                              |
+| notes/10 | PUT    | replaces the entire identified resource with the request data |
+| notes/10 | PATCH  | replaces a part of the identified resource with the request data |
+
+
+
+
+
+### Middleware
+
+name of the json-parser from the express
+
+be used for handling request and response objects
+
+could take the raw data from requests and parse it into JavaScript object, assigns it to the property `body`
+
+Middleware is a function that receives three parameters: `request`, `response`, `next`
+
+```javascript
+const requestLogger = (request, response, next) => {
+	console.log('Method: ', request.method)
+	console.log('Path: ', request.path)
+	console.log('Body: ', request.body)
+	console.log('---')
+	next()
+}
+```
+
+the `next` function yields control to the next middleware
+
+Use:
+
+```javascript
+app.use(requestLogger)
+```
+
+Others, we could use it for catching requests made to non-existent routes:
+
+```javascript
+const unknownEndpoint = (request, response) => {
+	response.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(unknownEndpoint)
+```
+
+
+
+
+
+### CORS
+
+Cross-Origin Resource Sharing
+
+it allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served.
+
+the JavaScript code of an application that runs in a browser can only communicate with a server in the same [origin](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy)
+
+Install: `npm install cors`
+
+Import and use:
+
+```javascript
+const cors = require('cors')
+app.use(cors())
+```
+
+
+
+
+
+
+
+cmd+shift and search ESLint
 
 
 

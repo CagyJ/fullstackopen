@@ -8,6 +8,9 @@ const app = express()
 // express json-parser
 app.use(express.json())
 
+const cors = require('cors')
+app.use(cors())
+
 let notes = [
     {
       id: 1,
