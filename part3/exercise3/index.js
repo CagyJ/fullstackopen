@@ -1,8 +1,10 @@
-const { application } = require('express')
+const morgan = require('morgan')
 const express = require('express')
 const app = express()
 
 app.use(express.json())
+// more form: https://github.com/expressjs/morgan#creating-new-tokens
+app.use(morgan(':method :remote-addr :url :date[iso]'))
 
 let persons = [
     { 
