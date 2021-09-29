@@ -25,7 +25,16 @@ const note = new Note({
     important: true
 })
 
-note.save().then(result => {
-    console.log('note saved!')
+// note.save().then(result => {
+//     console.log('note saved!')
+//     mongoose.connection.close()
+// })
+
+// we could add the filter condition in find() method as the parameter, 
+// like xx.find({important: true})
+Note.find({}).then(result => {
+    result.forEach(note => {
+        console.log(note)
+    })
     mongoose.connection.close()
 })
