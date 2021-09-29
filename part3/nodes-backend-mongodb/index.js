@@ -10,8 +10,16 @@ app.use(cors())
 
 
 const url = `mongodb+srv://cagyjiao:cagy0322@cluster0.iac40.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+console.log('connecting to', url)
 
 mongoose.connect(url)
+.then(result => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
+
 
 const noteSchema = new mongoose.Schema({
     content: String,
