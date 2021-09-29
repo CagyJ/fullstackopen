@@ -1,3 +1,5 @@
+require('dotenv').config
+
 const express = require('express')
 const app = express()
 
@@ -9,7 +11,7 @@ const cors = require('cors')
 app.use(cors())
 
 
-const url = `mongodb+srv://cagyjiao:cagy0322@cluster0.iac40.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
@@ -101,7 +103,7 @@ app.post('/api/notes', (request, response) => {
     response.json(note)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT
 // app.listen(PORT)
 // console.log(`Server running on port ${PORT}`)
 app.listen(PORT, () => {

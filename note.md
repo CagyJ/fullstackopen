@@ -1060,6 +1060,36 @@ Password: cagy0322
 
 
 
+Because there is password inside of the url, so it is better to use environment:
+
+```javascript
+const url = process.env.MONGODB_URI
+```
+
+and then, when we run it locally, we could do `MONGODB_URI={xxx} npm run dev`
+
+Or, we can use **dotenv** `npm install dotenv`
+
+and make a file called `xxx.env`, we can add inside:
+
+```properties
+MONGODB_URI='mongodb+srv://fullstack:sekred@cluster0-ostce.mongodb.net/note-app?retryWrites=true'
+PORT=3001
+```
+
+now, we could add `.env` to `.gitignore` to make our data be more safe.
+
+Use it:
+
+```javascript
+require('dotenv').config()
+const url = process.env.MONGODB_URI
+```
+
+
+
+
+
 cmd+shift and search ESLint
 
 
