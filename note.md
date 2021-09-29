@@ -1018,7 +1018,45 @@ app.use(cors())
 
 
 
+### Heroku
 
+https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+
+
+
+push local changes
+
+- Changes 
+- `npm install`
+- `heroic local` check local site
+- `git add .`
+- `git commit -m "xxx"` 
+- `git push heroku main` deploy to web server
+- `heroku open` open the web page
+
+
+
+define config vars
+
+- `heroku config:set XXX=xxx` set the config var
+- `heroku config` check the exists config vars
+- Use: `process.env.XXX`
+
+
+
+
+
+### MongoDB
+
+[MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+`mongodb+srv://cagyjiao:<password>@cluster0.iac40.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+
+Install MongoDb into project, use the higher level API, called Mongoose
+
+`npm install mongoose `
+
+Password: cagy0322
 
 
 
