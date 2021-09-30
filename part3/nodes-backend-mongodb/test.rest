@@ -50,3 +50,17 @@ Content-Type: application/json
 
 
 GET http://localhost:3001/api/notes/6155822eb4cac82e798072ee
+
+###
+
+DELETE http://localhost:3001/api/notes/6155822ab4cac82e798072ea
+
+###
+
+PUT http://localhost:3001/api/notes/61558229b4cac82e798072e8
+Content-Type: application/json
+
+{
+    "content": "VS Code REST client is not the best",
+    "important": true
+}
