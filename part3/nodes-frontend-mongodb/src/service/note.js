@@ -7,6 +7,11 @@ const getAll = () => {
     return request.then(response => response.data);
 }
 
+const getAll2 = async () => {
+    const response = await axios.get(baseUrl);
+    return response.data;
+}
+
 const create = newObject => {
     const request = axios.post(baseUrl, newObject);
     return request.then(response => response.data);
@@ -19,6 +24,7 @@ const update = (id, newObject) => {
 
 const noteService = {
     getAll,
+    getAll2,
     create,
     update
 }

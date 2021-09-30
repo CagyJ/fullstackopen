@@ -19,13 +19,18 @@ const App = ( ) => {
   //     })
   // }, []);
 
-  const hook = () => {
-    console.log('effect');
-    noteService
-      .getAll()
-      .then(initialNotes => 
+
+const hook = () => {
+    const func = async () => {
+      console.log('effect');
+      try {
+        const initialNotes = await noteService.getAll2();
         setNoteArr(initialNotes)
-      )
+      } catch(error) {
+        console.error(error);
+      }
+    }
+    func()
   }
 
   useEffect(hook, []);
