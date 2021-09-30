@@ -17,7 +17,7 @@ const noteSchema = new mongoose.Schema({
     important: Boolean
 })
 
-const Note = mongoose.model('Node', noteSchema)
+const Note = mongoose.model('Note', noteSchema)
 
 const note = new Note({
     content: 'HTML is Easy',

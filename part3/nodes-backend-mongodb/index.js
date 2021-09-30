@@ -22,19 +22,21 @@ app.get('/api/notes', (request, response) => {
     })
 })
 
-// // use colon syntax to define parameters in express
-// app.get('/api/notes/:id', (request, response) => {
-//     // the para should be 'string'
-//     const id = Number(request.params.id)
-//     const note = notes.find(note => note.id === id)
-    
-//     if (note) {
-//         response.json(note)
-//     } else {
-//         // display 404 error
-//         response.status(404).end()
-//     }
-// })
+app.get('/api/notes/:id', (request, response) => {
+    Note.findById(request.params.id)
+        .then(note => {
+            if (note) {
+                response.json(note)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            response.status(400).end({ error: 'malformatted id'})
+        })
+        
+})
 
 // app.delete('/api/notes/:id', (request, response) => {
 //     const id = Number(request.params.id)
@@ -43,34 +45,26 @@ app.get('/api/notes', (request, response) => {
 //     response.status(204).end()
 // })
 
-// const generateId = () => {
-//     const maxId = notes.length > 0
-//         ? Math.max(...notes.map(n => n.id))
-//         : 0
-//     return maxId + 1
-// }
+app.post('/api/notes', (request, response) => {
+    const body = request.body
 
-// app.post('/api/notes', (request, response) => {
+    if (body.content === undefined) {
+        return response.status(400).json( {
+            error: 'content missing'
+        })
+    }
+    console.log(body);
 
-//     const body = request.body
+    const note = new Note({
+        content: body.content,
+        important: body.important || false,
+        date: new Date(),
+    })
 
-//     if (!body.content) {
-//         return response.status(400).json( {
-//             error: 'content missing'
-//         })
-//     }
-
-//     const note = {
-//         content: body.content,
-//         important: body.important || false,
-//         date: new Date(),
-//         id: generateId(),
-//     }
-
-//     notes = notes.concat(note)
-
-//     response.json(note)
-// })
+    note.save().then(savedNote => {
+        response.json(savedNote)
+    })
+})
 
 const PORT = process.env.PORT
 // app.listen(PORT)
