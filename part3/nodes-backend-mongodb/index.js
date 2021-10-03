@@ -4,7 +4,7 @@ require('dotenv').config({
 
 const express = require('express')
 const app = express()
-const Note = require('./models/note')
+const NoteService = require('./service/noteService')
 const cors = require('cors')
 
 app.use(express.static('build'))
@@ -12,39 +12,46 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
+    const result = NoteService.init();
+    response.send(result);
 })
 
-app.get('/api/notes', (request, response, next) => {
-    Note.find({}).then(result => {
+app.get('/api/notes', async (request, response, next) => {
+    try {
+        const result = await NoteService.list();
         console.log(result);
-        response.json(result)
-    })
-    .catch(error => next(error))
+        response.json(result);
+    } catch (error) {
+        next(error)
+    }
+
 })
 
-app.get('/api/notes/:id', (request, response, next) => {
-    Note.findById(request.params.id)
-        .then(note => {
-            if (note) {
-                response.json(note)
-            } else {
-                response.status(404).end()
-            }
-        })
-        .catch(error => next(error))
-        
+app.get('/api/notes/:id', async (request, response, next) => {
+    try {
+        const result = await NoteService.selectById(request.params.id);
+        if (result) {
+            console.log(result);
+            response.json(result)
+        } else {
+            response.status(404).end()
+        }
+    } catch (error) {
+        next(error)
+    }    
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-    Note.findByIdAndRemove(request.params.id)
-        .then(result => {
-            response.status(204).end()
-        })
-        .catch(error => next(error))
+app.delete('/api/notes/:id', async (request, response, next) => {
+    try {
+        await NoteService.deleteById(request.params.id)
+        console.log("deleting id" + request.params.id);
+        response.status(204).end()
+    } catch (error) {
+        next(error)
+    }
 })
 
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', async (request, response, next) => {
     const body = request.body
 
     if (body.content === undefined) {
@@ -54,31 +61,24 @@ app.post('/api/notes', (request, response) => {
     }
     console.log(body);
 
-    const note = new Note({
-        content: body.content,
-        important: body.important || false,
-        date: new Date(),
-    })
-
-    note.save().then(savedNote => {
-        response.json(savedNote)
-    })
+    try {
+        const savedNote = await NoteService.addNote(body);
+        console.log(savedNote);
+        response.json(savedNote);
+    } catch (error) {
+        next(error)
+    }
 })
 
-app.put('/api/notes/:id', (request, response, next) => {
+app.put('/api/notes/:id', async (request, response, next) => {
     const body = request.body
 
-    const note = {
-        content: body.content,
-        important: body.important,
+    try {
+        const updatedNote = await NoteService.updateNote(request.params.id, body);
+        response.json(updatedNote);
+    } catch (error) {
+        next(error)
     }
-
-    // {new: true} means the findByIdAndUpdate method will return the new object, not the original one
-    Note.findByIdAndUpdate(request.params.id, note, {new: true})
-        .then(updatedNote => {
-            response.json(updatedNote)
-        })
-        .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
